@@ -1,0 +1,116 @@
+<odoo>
+    <record id="real_estate_search_view" model="ir.ui.view">
+        <field name="name">real.estate.view.search</field>
+        <field name="model">real.estate</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="state" invisible="1"/>
+                <field name="post_code"/>
+                <filter name="filter_state_name" string="New" domain="[('state', '=', 'new')]"/>
+                <filter name="filter_state_received" string="Offer Received" domain="[('state', '=', 'received')]"/>
+                <filter name="group_by_post_code" string="Postcode" context="{'group_by':'post_code'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="real_estate_tree_view" model="ir.ui.view">
+        <field name="name">real.estate.view.tree</field>
+        <field name="model">real.estate</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" width="200px"/>
+                <field name="post_code" width="100px"/>
+                <field name="bedrooms" width="100px"/>
+                <field name="living_area" width="120px"/>
+                <field name="expected_price" width="140px"/>
+                <field name="selling_price" width="140px"/>
+                <field name="date_availability" width="150px"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="real_estate_form_view" model="ir.ui.view">
+        <field name="name">real.estate.view.form</field>
+        <field name="model">real.estate</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="active" invisible="1"/>
+                    <group>
+                        <group>
+                            <h1>
+                               <field name="name"/>
+                               <field name="tag_ids" widget="many2many_tags"/>
+                            </h1>
+                        </group>
+                        <newline/>
+                        <group>
+                            <field name="property_type_id"/>
+                            <field name="post_code"/>
+                            <field name="date_availability" widget="date"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="best_offer"/>
+                            <field name="expected_price"/>
+                            <field name="selling_price"/>
+                        </group>
+                    </group> 
+                    <notebook>
+                        <page string="Description">
+                            <group>
+                                <group>
+                                    <field name="description"/>
+                                </group>
+                                <newline/>
+                                <group>
+                                    <field name="bedrooms"/>
+                                    <field name="facades"/>
+                                    <field name="garden"/>
+                                    <field name="total_area"/>
+                                </group>
+                                <group>
+                                    <field name="living_area"/>
+                                    <field name="garage"/>
+                                    <field name="garden_area"/>
+                                    <field name="garden_orientation"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Offers">
+                            <field name="offer_ids">
+                                <list>
+                                    <field name="price"/>
+                                    <field name="status"/>
+                                    <field name="partner_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Others Info">
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="test_record" model="ir.actions.act_window">
+        <field name="name">Test</field>
+        <field name="res_model">real.estate</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="tag_record" model="ir.actions.act_window">
+        <field name="name">Property Tags</field>
+        <field name="res_model">real.estate.tag</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="type_record" model="ir.actions.act_window">
+        <field name="name">Property Types</field>
+        <field name="res_model">real.estate.type</field>
+        <field name="view_mode">list,form</field>
+    </record>    
+
+</odoo>
