@@ -1,4 +1,5 @@
 from odoo import models, fields, api , _
+from odoo.exceptions import UserError
 from dateutil.relativedelta import relativedelta
 
 class RealEstate(models.Model):
@@ -28,6 +29,7 @@ class RealEstate(models.Model):
     expected_price = fields.Float()
     best_offer = fields.Float(compute="_compute_best_offer")
     selling_price = fields.Float(readonly=True)
+    buyer_id = fields.Many2one('res.partner', copy=False, readonly=True)
     description = fields.Text()
     bedrooms = fields.Integer(default=2)
     living_area = fields.Integer(string="Living Area (sqm)")
@@ -80,6 +82,15 @@ class RealEstate(models.Model):
                         'message': _("the availability date cannot be set in the past."),
                     }
                 }
-                
 
-  
+    def action_sold(self):
+        for record in self:
+            if record.state == 'canceled':
+                raise UserError(_("A canceled property cannot be set as sold."))
+            record.state = 'sold'
+
+    def action_cancel(self):
+        for record in self:
+            if record.state == 'sold':
+                raise UserError(_("A sold property cannot be canceled."))
+            record.state = 'canceled'

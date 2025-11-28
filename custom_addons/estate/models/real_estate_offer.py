@@ -1,4 +1,5 @@
-from odoo import models, fields, api
+from odoo import models, fields, api , _
+from odoo.exceptions import UserError
 from dateutil.relativedelta import relativedelta
 
 class estateOffer(models.Model):
@@ -28,4 +29,16 @@ class estateOffer(models.Model):
     def _inverse_date_deadline(self):
         for record in self:
             record.validity = (record.date_deadline - fields.Date.today()).days
+
+    def accept_offer(self):
+        self.ensure_one()
+        if "accepted" in self.property_id.offer_ids.mapped('status'):
+            raise UserError(_("Only one offer can be accepted for a property."))
+        self.status = 'accepted'
+        self.property_id.selling_price = self.price
+        self.property_id.buyer_id = self.partner_id
     
+    def refuse_offer(self):
+        self.ensure_one()
+        self.status = 'refused'
+
