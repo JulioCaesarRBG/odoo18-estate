@@ -14,6 +14,9 @@ class estateOffer(models.Model):
         ],
         copy=False,
     )
+    
+    _order = 'price desc'
+
     partner_id = fields.Many2one('res.partner', required= True)
     property_id = fields.Many2one('real.estate', required= True)
     type_id = fields.Many2one(related='property_id.property_type_id', store=True)

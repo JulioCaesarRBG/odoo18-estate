@@ -24,6 +24,8 @@ class RealEstate(models.Model):
     def _default_date(self):
         return fields.Date.today()
 
+    _order = 'id desc'
+
     post_code = fields.Char() 
     date_availability = fields.Date(default=_default_date)
     expected_price = fields.Float()
