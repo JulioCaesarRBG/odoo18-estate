@@ -1,9 +1,10 @@
 <odoo>
-    <menuitem id="root_level" name="Root">
-        <menuitem id="second_level" name="Estate">
+    <menuitem id="root_level" name="Real Estate">
+        <menuitem id="second_level" name="Advertisements">
             <menuitem id="third_level" name="Third" action="test_record"/>
+            <menuitem id="offer_level" name="Offers" action="offer_record"/>
         </menuitem>
-        <menuitem id="another_level" name="Another">
+        <menuitem id="another_level" name="Settings">
             <menuitem id="tag_level" name="Property Tag" action="tag_record"/>
             <menuitem id="type_level" name="Property Type" action="type_record"/>
         </menuitem>
