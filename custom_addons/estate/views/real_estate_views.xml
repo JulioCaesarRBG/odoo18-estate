@@ -1,4 +1,19 @@
 <odoo>
+    <record id="real_estate_tag_form_view" model="ir.ui.view">
+        <field name="name">real.estate.tag.view.form</field>
+        <field name="model">real.estate.tag</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="color" widget="color_picker"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     <record id="real_estate_type_form_view" model="ir.ui.view">
         <field name="name">real.estate.type.view.form</field>
         <field name="model">real.estate.type</field>
@@ -35,7 +50,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
-                <field name="state" invisible="1"/>
+                <!-- <field name="state" invisible="1"/> -->
                 <field name="post_code"/>
                 <filter name="filter_state_name" string="New" domain="[('state', '=', 'new')]"/>
                 <filter name="filter_state_received" string="Offer Received" domain="[('state', '=', 'received')]"/>
@@ -68,6 +83,7 @@
                 <header>
                     <button name="action_sold" type="object" string="Sold"/>
                     <button name="action_cancel" type="object" string="Cancel"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,received,sold,cancelled"/>
                 </header>
                 <sheet>
                     <field name="active" invisible="1"/>
@@ -75,7 +91,7 @@
                         <group>
                             <h1>
                                <field name="name"/>
-                               <field name="tag_ids" widget="many2many_tags"/>
+                               <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
                             </h1>
                         </group>
                         <newline/>
@@ -108,7 +124,7 @@
                                     <field name="living_area"/>
                                     <field name="garage"/>
                                     <field name="garden_area"/>
-                                    <field name="garden_orientation"/>
+                                    <field name="garden_orientation" widget="radio"/>
                                 </group>
                             </group>
                         </page>
