@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 
 class propertyType(models.Model):
     _name = 'real.estate.type'
@@ -10,8 +10,34 @@ class propertyType(models.Model):
     property_ids = fields.One2many('real.estate', 'property_type_id')
     offer_ids = fields.One2many('real.estate.offer', 'type_id')
     offer_count = fields.Integer(compute='_compute_offer_count')
+    property_count = fields.Integer(compute='_compute_property_count')
 
     @api.depends('offer_ids')
     def _compute_offer_count(self):
         for record in self:
             record.offer_count = len(record.offer_ids)   
+
+    @api.depends('property_ids')
+    def _compute_property_count(self):
+        for record in self:
+            record.property_count = len(record.property_ids)
+
+    def action_open_property_ids(self):
+        return {
+            'name': _('Related Properties'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'list,form',
+            'res_model': 'real.estate',
+            'domain': [('property_type_id', '=', self.id)],
+            "context": {'default_property_type_id': self.id},
+        }
+
+    def action_open_offer_ids(self):
+        return {
+            'name': _('Related Offers'),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'list,form',
+            'res_model': 'real.estate.offer',
+            'domain': [('type_id', '=', self.id)],
+            "context": {'default_type_id': self.id},
+        }
