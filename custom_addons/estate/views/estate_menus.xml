@@ -1,8 +1,8 @@
 <odoo>
-    <menuitem id="root_level" name="Real Estate">
+    <menuitem id="root_level" name="Real Estate" action="test_record">
         <menuitem id="second_level" name="Advertisements">
-            <menuitem id="third_level" name="Third" action="test_record"/>
-            <menuitem id="offer_level" name="Offers" action="offer_record"/>
+            <menuitem id="third_level" name="Users" action="res_users_action"/>
+            <menuitem id="offer_level" name="Offers" action="offer_action_window"/>
         </menuitem>
         <menuitem id="another_level" name="Settings">
             <menuitem id="tag_level" name="Property Tag" action="tag_record"/>

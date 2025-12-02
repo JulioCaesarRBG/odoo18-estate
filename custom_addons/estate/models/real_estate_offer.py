@@ -45,3 +45,19 @@ class estateOffer(models.Model):
         self.ensure_one()
         self.status = 'refused'
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if 'property_id' in vals and 'price' in vals:
+                existing_offers = self.search([('property_id', '=', vals['property_id'])])
+                if existing_offers:
+                    max_existing_price = max(existing_offers.mapped('price'))
+                    if vals['price'] <= max_existing_price:
+                        raise UserError(_("The offer amount must be higher than the existing offers (%.2f).") % max_existing_price)
+    
+        res = super().create(vals_list)
+        for record in res:
+            record.property_id.state = 'received'
+        
+        return res
+

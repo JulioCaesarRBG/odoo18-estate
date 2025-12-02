@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 
 class RealEstate(models.Model):
     _name = 'real.estate'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Real Estate Model'
 
     active = fields.Boolean(default=True, invisible=False)
@@ -32,6 +33,7 @@ class RealEstate(models.Model):
     best_offer = fields.Float(compute="_compute_best_offer")
     selling_price = fields.Float(readonly=True)
     buyer_id = fields.Many2one('res.partner', copy=False, readonly=True)
+    salesperson_id = fields.Many2one('res.users', string='Salesperson', default=lambda self: self.env.user)
     description = fields.Text()
     bedrooms = fields.Integer(default=2)
     living_area = fields.Integer(string="Living Area (sqm)")
@@ -102,3 +104,9 @@ class RealEstate(models.Model):
         for record in self:
             if record.selling_price and record.selling_price < (record.expected_price * 90) / 100:
                 raise ValidationError(_("The selling price cannot be lower than 90% of the expected price."))
+
+    @api.ondelete(at_uninstall=False)
+    def _unlink_if_new_or_canceled(self):
+        for record in self:
+            if record.state not in ('new', 'canceled'):
+                raise UserError(_("Only properties with state 'New' or 'Canceled' can be deleted."))

@@ -43,8 +43,8 @@
                             <field name="property_count" widget="line_count" string="Properties"/>
                         </button>
                         <button string="Offers" 
-                        type="action" 
-                        name="%(offer_record)d" 
+                        type="object" 
+                        name="action_open_offer_ids" 
                         class="oe_stat_button" 
                         icon="fa-usd">
                             <field name="offer_count" widget="line_count" string="Offers"/>
@@ -191,19 +191,28 @@
                             </field>
                         </page>
                         <page string="Others Info">
+
                         </page>
                     </notebook>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>
     
     <!-- Real Estate Action -->
     <record id="test_record" model="ir.actions.act_window">
-        <field name="name">Test</field>
+        <field name="name">Real Estate</field>
         <field name="res_model">real.estate</field>
         <field name="view_mode">list,form</field>
         <field name="context">{'search_default_filter_available': True}</field>
+    </record>
+
+    <!-- Res Users Action -->
+    <record id="res_users_action" model="ir.actions.act_window">
+        <field name="name">Users</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">list,form</field>
     </record>
 
     <!-- Real Estate Tag Action -->
@@ -248,11 +257,33 @@
     </record>
 
     <!-- Real Estate Offer Action -->
-    <record id="offer_record" model="ir.actions.act_window">
+    <record id="offer_action_window" model="ir.actions.act_window">
         <field name="name">Offers</field>
         <field name="res_model">real.estate.offer</field>
         <field name="view_mode">list,form</field>
-        <field name="domain">[('type_id', '=', active_id)]</field>
-    </record>    
+    </record>
+
+    <!-- Res Users Form View Inherit -->
+    <record id="view_users_form_inherit_estate" model="ir.ui.view">
+        <field name="name">res.users.form.inherit.estate</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Real Estate Properties" name="real_estate_properties">
+                    <field name="property_type_ids">
+                        <list string="Properties">
+                            <field name="name"/>
+                            <field name="property_type_id"/>
+                            <field name="post_code"/>
+                            <field name="expected_price"/>
+                            <field name="best_offer"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
 
 </odoo>
