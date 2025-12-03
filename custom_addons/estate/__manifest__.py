@@ -20,5 +20,10 @@
     ],
     "demo": [
         "demo/demo.xml"
-        ]
+        ],
+    "assets": {
+        "web.assets_backend": [
+            "estate/static/src/css/estate.css",
+        ],
+    }
 }

@@ -1,0 +1,18 @@
+/* Estate Module Custom CSS */
+
+/* Navbar color */
+.o_main_navbar {
+    background-color: #3498db !important;
+}
+
+/* Navbar button color */
+.o_main_navbar .btn, 
+.o_main_navbar button {
+    background-color: #3498db !important;
+}
+
+/* Action manager button color */
+.o_action_manager .btn-primary,
+.o_action_manager .btn.btn-primary {
+    background-color: #3498db !important;
+}
