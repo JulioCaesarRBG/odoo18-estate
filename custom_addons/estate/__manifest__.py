@@ -13,6 +13,10 @@
         #views
         "views/real_estate_views.xml",
         "views/estate_menus.xml",
+        "views/real_estate_tag_view.xml",
+        "views/real_estate_type_view.xml",
+        "views/real_estate_offer_view.xml",
+        "views/real_estate_users_view.xml",
         # "views/estate_property_views.xml",
         # "views/estates_menu.xml",
         #menus

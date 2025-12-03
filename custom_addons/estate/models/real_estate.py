@@ -64,8 +64,8 @@ class RealEstate(models.Model):
             record.total_area = (record.living_area or 0) + (record.garden_area or 0)
 
     @api.depends('offer_ids.price')
-    """Compute the best offer as the maximum price among all offers"""
     def _compute_best_offer(self):
+        """Compute the best offer price for the property"""
         for record in self:
             if record.offer_ids:
                 record.best_offer = max(record.offer_ids.mapped('price'))
