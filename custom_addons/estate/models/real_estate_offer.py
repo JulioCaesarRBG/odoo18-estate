@@ -1,6 +1,7 @@
 from odoo import models, fields, api , _
 from odoo.exceptions import UserError
 from dateutil.relativedelta import relativedelta
+from ..services.offer_estate_service import OfferEstateService
 
 class estateOffer(models.Model):
     _name = 'real.estate.offer'
@@ -26,39 +27,39 @@ class estateOffer(models.Model):
 
     @api.depends('validity')
     def _compute_date_deadline(self):
+        """Compute the deadline date based on validity"""
         for record in self:
             record.date_deadline = fields.Date.today() + relativedelta(days=record.validity)
 
     def _inverse_date_deadline(self):
+        """Inverse method to update validity based on date_deadline"""
         for record in self:
             record.validity = (record.date_deadline - fields.Date.today()).days
 
     def accept_offer(self):
+        """Accept offer"""
         self.ensure_one()
-        if "accepted" in self.property_id.offer_ids.mapped('status'):
-            raise UserError(_("Only one offer can be accepted for a property."))
-        self.status = 'accepted'
-        self.property_id.selling_price = self.price
-        self.property_id.buyer_id = self.partner_id
-        self.property_id.state = 'accepted'
+        service = OfferEstateService(self.env)
+        service.accept_offer(self.id)
     
     def refuse_offer(self):
+        """Refuse offer"""
         self.ensure_one()
-        self.status = 'refused'
+        service = OfferEstateService(self.env)
+        service.refuse_offer(self.id)
 
     @api.model_create_multi
     def create(self, vals_list):
+        """Create offer with validations and update property state"""
+        service = OfferEstateService(self.env)
+        
         for vals in vals_list:
             if 'property_id' in vals and 'price' in vals:
-                existing_offers = self.search([('property_id', '=', vals['property_id'])])
-                if existing_offers:
-                    max_existing_price = max(existing_offers.mapped('price'))
-                    if vals['price'] <= max_existing_price:
-                        raise UserError(_("The offer amount must be higher than the existing offers (%.2f).") % max_existing_price)
+                service.validate_new_offer(vals['property_id'], vals['price'])
     
         res = super().create(vals_list)
         for record in res:
-            record.property_id.state = 'received'
+            service.update_property_state_on_offer(record.property_id.id)
         
         return res
 

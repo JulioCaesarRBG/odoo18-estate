@@ -1,4 +1,5 @@
 from odoo import models, fields, api, _
+from ..services.type_estate_service import TypeEstateService
 
 class propertyType(models.Model):
     _name = 'real.estate.type'
@@ -15,26 +16,30 @@ class propertyType(models.Model):
 
     @api.model_create_multi
     def create(self, vals_list):
+        """Create property type and associated tag"""
         res = super().create(vals_list)
+        service = TypeEstateService(self.env)
+        
         for vals in vals_list:
-            self.env['real.estate.tag'].create(
-                {
-                    'name': vals.get('name')
-                }
-            )
+            service.create_tag_from_type(vals.get('name'))
+        
         return res
 
     def unlink(self):
-        self.property_ids.state = 'canceled'
+        """Cancel all properties when type is deleted"""
+        service = TypeEstateService(self.env)
+        service.cancel_properties_on_delete(self.property_ids.ids)
         return super().unlink()
 
     @api.depends('offer_ids')
     def _compute_offer_count(self):
+        """Compute the number of offers associated with this type"""
         for record in self:
             record.offer_count = len(record.offer_ids)   
 
     @api.depends('property_ids')
     def _compute_property_count(self):
+        """Compute the number of properties associated with this type"""
         for record in self:
             record.property_count = len(record.property_ids)
 

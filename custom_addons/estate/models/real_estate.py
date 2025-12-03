@@ -1,6 +1,7 @@
 from odoo import models, fields, api , _
 from odoo.exceptions import UserError, ValidationError
 from dateutil.relativedelta import relativedelta
+from ..services.estate_service import EstateService
 
 class RealEstate(models.Model):
     _name = 'real.estate'
@@ -58,10 +59,12 @@ class RealEstate(models.Model):
 
     @api.depends('living_area', 'garden_area')
     def _compute_total_area(self):
+        """Compute total area as sum of living area and garden area"""
         for record in self:
             record.total_area = (record.living_area or 0) + (record.garden_area or 0)
 
     @api.depends('offer_ids.price')
+    """Compute the best offer as the maximum price among all offers"""
     def _compute_best_offer(self):
         for record in self:
             if record.offer_ids:
@@ -71,6 +74,7 @@ class RealEstate(models.Model):
 
     @api.onchange('garden')
     def _onchange_garden(self):
+        """Reset garden area and orientation if garden is False"""
         for record in self:
             if not record.garden:
                 record.garden_area = 0
@@ -78,6 +82,7 @@ class RealEstate(models.Model):
 
     @api.onchange("date_availability")
     def _onchange_date_availability(self):
+        """Warn if availability date is set in the past"""
         for record in self:
             if record.date_availability < fields.Date.today():
                 return {
@@ -88,25 +93,27 @@ class RealEstate(models.Model):
                 }
 
     def action_sold(self):
+        """Mark property as sold"""
+        service = EstateService(self.env)
         for record in self:
-            if record.state == 'canceled':
-                raise UserError(_("A canceled property cannot be set as sold."))
-            record.state = 'sold'
+            service.sell_property(record.id)
 
     def action_cancel(self):
+        """Cancel property"""
+        service = EstateService(self.env)
         for record in self:
-            if record.state == 'sold':
-                raise UserError(_("A sold property cannot be canceled."))
-            record.state = 'canceled'
+            service.cancel_property(record.id)
 
     @api.constrains('selling_price', 'expected_price')
     def _check_constraint(self):
+        """Validate selling price is at least 90% of expected price"""
+        service = EstateService(self.env)
         for record in self:
-            if record.selling_price and record.selling_price < (record.expected_price * 90) / 100:
-                raise ValidationError(_("The selling price cannot be lower than 90% of the expected price."))
+            service.validate_selling_price(record.selling_price, record.expected_price)
 
     @api.ondelete(at_uninstall=False)
     def _unlink_if_new_or_canceled(self):
+        """Validate property can only be deleted if state is new or canceled"""
+        service = EstateService(self.env)
         for record in self:
-            if record.state not in ('new', 'canceled'):
-                raise UserError(_("Only properties with state 'New' or 'Canceled' can be deleted."))
+            service.validate_delete(record.state)
