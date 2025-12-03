@@ -131,8 +131,8 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="action_sold" invisible="state in ('sold', 'canceled')" type="object" string="Sold"/>
-                    <button name="action_cancel" invisible="state in ('sold', 'canceled')" type="object" string="Cancel"/>
+                    <button name="action_sold" invisible="state in ('sold', 'canceled')" type="object" string="Sold" confirm="Are you sure you want to mark this property as sold?"/>
+                    <button name="action_cancel" invisible="state in ('sold', 'canceled')" type="object" string="Cancel" confirm="Are you sure you want to cancel this property?"/>
                     <field name="state" widget="statusbar" statusbar_visible="new,received,accepted,sold,canceled"/>
                 </header>
                 <sheet>
@@ -189,8 +189,8 @@
                                     <field name="partner_id"/>
                                     <field name="type_id"/>
                                     <field name="date_deadline" column-invisible="parent.status =='sold'"/>
-                                    <button icon="fa-check" invisible="status in ('accepted', 'refused')" name="accept_offer" type="object"/>
-                                    <button icon="fa-times" invisible="status in ('accepted', 'refused')" name="refuse_offer" type="object"/>
+                                    <button icon="fa-check" invisible="status in ('accepted', 'refused')" name="accept_offer" type="object" confirm="Are you sure you want to accept this offer?"/>
+                                    <button icon="fa-times" invisible="status in ('accepted', 'refused')" name="refuse_offer" type="object" confirm="Are you sure you want to refuse this offer?"/>
                                     <field name="status" optional="False"/>
 
                                 </list>
