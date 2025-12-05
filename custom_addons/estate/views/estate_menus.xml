@@ -8,5 +8,9 @@
             <menuitem id="tag_level" name="Property Tag" action="tag_record"/>
             <menuitem id="type_level" name="Property Type" action="type_record"/>
         </menuitem>
+        <menuitem id="controller_level" name="Controller">
+            <menuitem id="controller_example" name="Example" action="action_custom_example_list"/>
+            <menuitem id="render_level" name="Render Page" action="action_render_page"/>
+        </menuitem>
     </menuitem>
 </odoo>

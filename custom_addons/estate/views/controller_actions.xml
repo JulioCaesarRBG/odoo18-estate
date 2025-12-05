@@ -1,0 +1,15 @@
+<odoo>
+    <!-- Menu items for Controller actions -->
+    <record id="action_custom_example_list" model="ir.actions.act_url">
+        <field name="name">Example JSON Data</field>
+        <field name="url">/estate/get_info</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menu item for Render Page -->
+    <record id="action_render_page" model="ir.actions.act_url">
+        <field name="name">Render Page</field>
+        <field name="url">/estate/page</field>
+        <field name="target">self</field>
+    </record>
+</odoo>

@@ -1,0 +1,46 @@
+<odoo>
+    <!-- Template for JSON data display -->
+    <template id="example_json_page" name="Example JSON Data Page">
+        <t t-call="web.html_container">
+            <div class="container mt-5">
+                <h2>Estate Data (JSON Format)</h2>
+                <div class="alert alert-info">
+                    <strong>Status:</strong> <span t-esc="status"/>
+                    <br/>
+                    <strong>Count:</strong> <span t-esc="count"/>
+                </div>
+                
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Selling Price</th>
+                            <th>Description</th>
+                            <th>State</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="results" t-as="item">
+                            <td t-esc="item['id']"/>
+                            <td t-esc="item['name']"/>
+                            <td t-esc="item['selling_price']"/>
+                            <td t-esc="item['description']"/>
+                            <td t-esc="item['state']"/>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <!-- Template for Render Page -->
+    <template id="template_page" name="Custom Controller Page">
+        <t t-call="web.html_container">
+            <div class="container mt-5">
+                <h2 t-esc="message"/>
+                <p>This is a static page rendered by the controller.</p>
+            </div>
+        </t>
+    </template>
+</odoo>
