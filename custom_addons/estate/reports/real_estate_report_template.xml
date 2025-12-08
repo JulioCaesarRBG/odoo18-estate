@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main template for Real Estate Report -->
+    <template id="report_real_estate_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <!-- Header Section -->
+                        <div class="row" style="border-bottom: 3px solid #875A7B; padding-bottom: 10px; margin-bottom: 20px;">
+                            <div class="col-8">
+                                <h2 style="color: #875A7B; margin: 0;">
+                                    <i class="fa fa-home"/> <strong>Property Report</strong>
+                                </h2>
+                                <p style="margin: 5px 0 0 0; color: #666;">
+                                    <span t-esc="o.name"/>
+                                </p>
+                            </div>
+                            <div class="col-4 text-right">
+                                <div style="background-color: #875A7B; color: white; padding: 10px; border-radius: 5px;">
+                                    <strong>Reference</strong><br/>
+                                    <span style="font-size: 18px;" t-esc="o.id"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Property Status Badge -->
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div style="background: linear-gradient(135deg, #875A7B 0%, #a67ca3 100%); color: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <h5 style="margin: 0; color: white;"><i class="fa fa-building"/> Property Type</h5>
+                                            <h3 style="margin: 5px 0 0 0; color: white;"><t t-esc="o.property_type_id.name if o.property_type_id else 'N/A'"/></h3>
+                                        </div>
+                                        <div class="col-6 text-right">
+                                            <h5 style="margin: 0; color: white;"><i class="fa fa-flag"/> Status</h5>
+                                            <h3 style="margin: 5px 0 0 0; color: white;">
+                                                <t t-if="o.state == 'new'">New</t>
+                                                <t t-elif="o.state == 'received'">Offer Received</t>
+                                                <t t-elif="o.state == 'accepted'">Offer Accepted</t>
+                                                <t t-elif="o.state == 'sold'">Sold</t>
+                                                <t t-elif="o.state == 'canceled'">Canceled</t>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Details -->
+                        <div class="row">
+                            <div class="col-6">
+                                <h5 style="background-color: #f8f9fa; padding: 8px; border-left: 4px solid #875A7B; margin-bottom: 15px;">
+                                    <i class="fa fa-info-circle"/> <strong>Property Details</strong>
+                                </h5>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td style="width: 50%; padding: 8px;"><i class="fa fa-map-marker" style="color: #875A7B;"/> <strong>Post Code:</strong></td>
+                                        <td><t t-esc="o.post_code if o.post_code else 'N/A'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Date Availability:</strong></td>
+                                        <td><span t-field="o.date_availability"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Expected Price:</strong></td>
+                                        <td><span t-field="o.expected_price" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Selling Price:</strong></td>
+                                        <td><span t-field="o.selling_price" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Best Offer:</strong></td>
+                                        <td><span t-field="o.best_offer" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <h5 style="background-color: #f8f9fa; padding: 8px; border-left: 4px solid #875A7B; margin-bottom: 15px;">
+                                    <i class="fa fa-users"/> <strong>Contact &amp; Specifications</strong>
+                                </h5>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td style="width: 45%; padding: 8px;"><i class="fa fa-user" style="color: #875A7B;"/> <strong>Salesperson:</strong></td>
+                                        <td style="padding: 8px;"><t t-esc="o.salesperson_id.name if o.salesperson_id else 'N/A'"/></td>
+                                    </tr>
+                                    <tr t-if="o.buyer_id" style="background-color: #f8f9fa;">
+                                        <td style="padding: 8px;"><i class="fa fa-handshake-o" style="color: #875A7B;"/> <strong>Buyer:</strong></td>
+                                        <td style="padding: 8px;"><t t-esc="o.buyer_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px;"><i class="fa fa-bed" style="color: #875A7B;"/> <strong>Bedrooms:</strong></td>
+                                        <td style="padding: 8px;"><t t-esc="o.bedrooms"/></td>
+                                    </tr>
+                                    <tr style="background-color: #f8f9fa;">
+                                        <td style="padding: 8px;"><i class="fa fa-home" style="color: #875A7B;"/> <strong>Living Area:</strong></td>
+                                        <td style="padding: 8px;"><strong><t t-esc="o.living_area"/> sqm</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 8px;"><i class="fa fa-building-o" style="color: #875A7B;"/> <strong>Facades:</strong></td>
+                                        <td style="padding: 8px;"><t t-esc="o.facades if o.facades else 0"/></td>
+                                    </tr>
+                                    <tr style="background-color: #f8f9fa;">
+                                        <td style="padding: 8px;"><i class="fa fa-car" style="color: #875A7B;"/> <strong>Garage:</strong></td>
+                                        <td style="padding: 8px;">
+                                            <span t-if="o.garage" class="badge badge-success">Yes</span>
+                                            <span t-else="" class="badge badge-secondary">No</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Garden Information -->
+                        <t t-if="o.garden">
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h5 style="background-color: #28a745; color: white; padding: 10px; border-radius: 5px;">
+                                        <i class="fa fa-tree"/> <strong>Garden Information</strong>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <table class="table table-sm table-borderless">
+                                        <tr>
+                                            <td style="width: 50%;"><strong>Garden Area:</strong></td>
+                                            <td><t t-esc="o.garden_area"/> sqm</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Garden Orientation:</strong></td>
+                                            <td>
+                                                <t t-if="o.garden_orientation == 'north'">North</t>
+                                                <t t-elif="o.garden_orientation == 'south'">South</t>
+                                                <t t-elif="o.garden_orientation == 'east'">East</t>
+                                                <t t-elif="o.garden_orientation == 'west'">West</t>
+                                                <t t-else="">N/A</t>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-6">
+                                    <table class="table table-sm table-borderless">
+                                        <tr>
+                                            <td style="width: 40%;"><strong>Total Area:</strong></td>
+                                            <td><t t-esc="o.total_area"/> sqm</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Tags -->
+                        <t t-if="o.tag_ids">
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h5 style="background-color: #17a2b8; color: white; padding: 10px; border-radius: 5px;">
+                                        <i class="fa fa-tags"/> <strong>Property Tags</strong>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <t t-foreach="o.tag_ids" t-as="tag">
+                                        <span class="badge badge-pill badge-secondary mr-1" style="font-size: 12px; margin-right: 5px;">
+                                            <t t-esc="tag.name"/>
+                                        </span>
+                                    </t>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Description -->
+                        <t t-if="o.description">
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h5 style="background-color: #6c757d; color: white; padding: 10px; border-radius: 5px;">
+                                        <i class="fa fa-align-left"/> <strong>Property Description</strong>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #6c757d;">
+                                        <p style="text-align: justify; white-space: pre-line; margin: 0;">
+                                            <t t-esc="o.description"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Offers Table -->
+                        <t t-if="o.offer_ids">
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h5 style="background-color: #ffc107; color: #000; padding: 10px; border-radius: 5px;">
+                                        <i class="fa fa-list-alt"/> <strong>Received Offers</strong>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <table class="table table-sm table-bordered" style="border: 2px solid #875A7B;">
+                                        <thead style="background-color: #875A7B; color: white;">
+                                            <tr>
+                                                <th style="padding: 10px;"><i class="fa fa-money"/> Price</th>
+                                                <th style="padding: 10px;"><i class="fa fa-user"/> Partner</th>
+                                                <th style="padding: 10px;"><i class="fa fa-clock-o"/> Validity (Days)</th>
+                                                <th style="padding: 10px;"><i class="fa fa-calendar"/> Deadline</th>
+                                                <th style="padding: 10px;"><i class="fa fa-info-circle"/> Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="o.offer_ids" t-as="offer">
+                                                <tr t-att-style="'background-color: %s;' % ('#e7f3e7' if offer.status == 'accepted' else '#ffe6e6' if offer.status == 'refused' else 'white')">
+                                                    <td style="padding: 10px; font-weight: bold;">
+                                                        <span t-field="offer.price" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                                    </td>
+                                                    <td style="padding: 10px;"><t t-esc="offer.partner_id.name if offer.partner_id else 'N/A'"/></td>
+                                                    <td style="padding: 10px; text-align: center;"><t t-esc="offer.validity"/></td>
+                                                    <td style="padding: 10px;"><span t-field="offer.date_deadline"/></td>
+                                                    <td style="padding: 10px;">
+                                                        <span t-if="offer.status == 'accepted'" class="badge badge-success">Accepted</span>
+                                                        <span t-elif="offer.status == 'refused'" class="badge badge-danger">Refused</span>
+                                                        <span t-else="" class="badge badge-secondary">Pending</span>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </t>
+
+                        <!-- Footer -->
+                        <div class="row mt-5" style="border-top: 2px solid #875A7B; padding-top: 15px;">
+                            <div class="col-6">
+                                <p style="font-size: 11px; margin: 0;">
+                                    <strong>Company:</strong> <span t-esc="o.env.company.name"/><br/>
+                                    <strong>Phone:</strong> <span t-esc="o.env.company.phone or 'N/A'"/><br/>
+                                    <strong>Email:</strong> <span t-esc="o.env.company.email or 'N/A'"/>
+                                </p>
+                            </div>
+                            <div class="col-6 text-right">
+                                <p class="text-muted" style="font-size: 10px; margin: 0;">
+                                    <i class="fa fa-calendar"/> Report generated on<br/>
+                                    <strong><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y - %H:%M:%S')"/></strong>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Report action definition -->
+    <record id="action_report_real_estate" model="ir.actions.report">
+        <field name="name">Property Report</field>
+        <field name="model">real.estate</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">estate.report_real_estate_document</field>
+        <field name="report_file">estate.report_real_estate_document</field>
+        <field name="binding_model_id" ref="model_real_estate"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">'Property Report - %s' % (object.name)</field>
+    </record>
+
+</odoo>

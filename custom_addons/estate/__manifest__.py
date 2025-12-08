@@ -23,6 +23,9 @@
         #templates
         "views/templates.xml",
         
+        #reports
+        "reports/real_estate_report_template.xml",
+        
         #menus
         "views/estate_menus.xml",
 

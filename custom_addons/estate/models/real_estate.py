@@ -22,6 +22,7 @@ class RealEstate(models.Model):
         copy=False,
         default='new'
     )
+    currency_id = fields.Many2one('res.currency', string='Currency', default=lambda self: self.env.company.currency_id)
     
     def _default_date(self):
         return fields.Date.today()
