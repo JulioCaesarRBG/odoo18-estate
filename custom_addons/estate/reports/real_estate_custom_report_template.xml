@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Main template for Real Estate Report -->
-    <template id="report_real_estate_document">
+    <!-- Custom Print Template (with field selection from wizard) -->
+    <template id="report_real_estate_custom_document">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <div class="page" style="padding: 10mm 15mm;">
-                    <!-- Company Header -->
-                    <div class="row" style="border-bottom: 2px solid #875A7B; margin-bottom: 15px; padding-bottom: 8px;">
-                        <div class="col-6">
-                            <img t-if="o.env.company.logo" t-att-src="image_data_uri(o.env.company.logo)" style="max-height: 60px;" alt="Company Logo"/>
-                            <div t-if="not o.env.company.logo">
-                                <h3 style="margin: 0;"><span t-field="o.env.company.name"/></h3>
+                <div class="page" style="padding: 20mm 15mm;">
+                    
+                    <!-- Company Header (conditional from wizard) -->
+                    <t t-if="not data or data.get('include_images', True)">
+                        <div class="row" style="border-bottom: 2px solid #875A7B; margin-bottom: 15px; padding-bottom: 8px;">
+                            <div class="col-6">
+                                <img t-if="o.env.company.logo" t-att-src="image_data_uri(o.env.company.logo)" style="max-height: 60px;" alt="Company Logo"/>
+                                <div t-if="not o.env.company.logo">
+                                    <h3 style="margin: 0;"><span t-field="o.env.company.name"/></h3>
+                                </div>
+                            </div>
+                            <div class="col-6 text-right">
+                                <h2 style="color: #875A7B; margin: 0; font-size: 22px;">
+                                    <strong>Property Report</strong>
+                                </h2>
+                                <p style="margin: 3px 0 0 0; color: #666; font-size: 11px;">
+                                    Ref: <span t-esc="o.id"/>
+                                </p>
                             </div>
                         </div>
-                        <div class="col-6 text-right">
-                            <h2 style="color: #875A7B; margin: 0; font-size: 22px;">
-                                <strong>Property Report</strong>
-                            </h2>
-                            <p style="margin: 3px 0 0 0; color: #666; font-size: 11px;">
-                                Ref: <span t-esc="o.id"/>
-                            </p>
-                        </div>
-                    </div>
+                    </t>
 
                     <!-- Property Name and Status -->
                     <div class="row" style="margin-bottom: 15px;">
@@ -45,73 +48,107 @@
                         </div>
                     </div>
 
-                    <!-- Main Details -->
-                    <div class="row">
-                        <div class="col-6">
-                            <h5 style="background-color: #f8f9fa; padding: 6px; border-left: 3px solid #875A7B; margin-bottom: 10px; font-size: 14px;">
-                                <strong>Property Details</strong>
-                            </h5>
-                            <table class="table table-sm" style="font-size: 12px;">
-                                <tr>
-                                    <td style="width: 50%; padding: 5px;"><strong>Post Code:</strong></td>
-                                    <td><t t-esc="o.post_code if o.post_code else 'N/A'"/></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Date Availability:</strong></td>
-                                    <td><span t-field="o.date_availability"/></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Expected Price:</strong></td>
-                                    <td><span t-field="o.expected_price" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Selling Price:</strong></td>
-                                    <td><span t-field="o.selling_price" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Best Offer:</strong></td>
-                                    <td><span t-field="o.best_offer" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
-                                </tr>
-                            </table>
+                    <!-- Property Details (conditional) -->
+                    <t t-if="not data or data.get('show_property_details', True)">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 style="background-color: #f8f9fa; padding: 6px; border-left: 3px solid #875A7B; margin-bottom: 10px; font-size: 14px;">
+                                    <strong>Property Details</strong>
+                                </h5>
+                                <table class="table table-sm" style="font-size: 12px;">
+                                    <tr>
+                                        <td style="width: 50%; padding: 5px;"><strong>Post Code:</strong></td>
+                                        <td><t t-esc="o.post_code if o.post_code else 'N/A'"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Date Availability:</strong></td>
+                                        <td><span t-field="o.date_availability"/></td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <h5 style="background-color: #f8f9fa; padding: 6px; border-left: 3px solid #875A7B; margin-bottom: 10px; font-size: 14px;">
-                                <strong>Contact &amp; Specifications</strong>
-                            </h5>
-                            <table class="table table-sm" style="font-size: 12px;">
-                                <tr>
-                                    <td style="width: 45%; padding: 5px;"><strong>Salesperson:</strong></td>
-                                    <td style="padding: 5px;"><t t-esc="o.salesperson_id.name if o.salesperson_id else 'N/A'"/></td>
-                                </tr>
-                                <tr t-if="o.buyer_id" style="background-color: #f8f9fa;">
-                                    <td style="padding: 5px;"><strong>Buyer:</strong></td>
-                                    <td style="padding: 5px;"><t t-esc="o.buyer_id.name"/></td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 5px;"><strong>Bedrooms:</strong></td>
-                                    <td style="padding: 5px;"><t t-esc="o.bedrooms"/></td>
-                                </tr>
-                                <tr style="background-color: #f8f9fa;">
-                                    <td style="padding: 5px;"><strong>Living Area:</strong></td>
-                                    <td style="padding: 5px;"><strong><t t-esc="o.living_area"/> sqm</strong></td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 5px;"><strong>Facades:</strong></td>
-                                    <td style="padding: 5px;"><t t-esc="o.facades if o.facades else 0"/></td>
-                                </tr>
-                                <tr style="background-color: #f8f9fa;">
-                                    <td style="padding: 5px;"><strong>Garage:</strong></td>
-                                    <td style="padding: 5px;">
-                                        <span t-if="o.garage">Yes</span>
-                                        <span t-else="">No</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                    </t>
 
-                    <!-- Garden Information -->
-                    <t t-if="o.garden">
+                    <!-- Price Information (conditional) -->
+                    <t t-if="not data or data.get('show_price_info', True)">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 style="background-color: #f8f9fa; padding: 6px; border-left: 3px solid #875A7B; margin-bottom: 10px; font-size: 14px;">
+                                    <strong>Price Information</strong>
+                                </h5>
+                                <table class="table table-sm" style="font-size: 12px;">
+                                    <tr>
+                                        <td style="width: 50%; padding: 5px;"><strong>Expected Price:</strong></td>
+                                        <td><span t-field="o.expected_price" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Selling Price:</strong></td>
+                                        <td><span t-field="o.selling_price" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Best Offer:</strong></td>
+                                        <td><span t-field="o.best_offer" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+
+                    <!-- Contact Information (conditional) -->
+                    <t t-if="not data or data.get('show_contact_info', True)">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 style="background-color: #f8f9fa; padding: 6px; border-left: 3px solid #875A7B; margin-bottom: 10px; font-size: 14px;">
+                                    <strong>Contact Information</strong>
+                                </h5>
+                                <table class="table table-sm" style="font-size: 12px;">
+                                    <tr>
+                                        <td style="width: 45%; padding: 5px;"><strong>Salesperson:</strong></td>
+                                        <td style="padding: 5px;"><t t-esc="o.salesperson_id.name if o.salesperson_id else 'N/A'"/></td>
+                                    </tr>
+                                    <tr t-if="o.buyer_id" style="background-color: #f8f9fa;">
+                                        <td style="padding: 5px;"><strong>Buyer:</strong></td>
+                                        <td style="padding: 5px;"><t t-esc="o.buyer_id.name"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+
+                    <!-- Specifications (conditional) -->
+                    <t t-if="not data or data.get('show_specifications', True)">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 style="background-color: #f8f9fa; padding: 6px; border-left: 3px solid #875A7B; margin-bottom: 10px; font-size: 14px;">
+                                    <strong>Specifications</strong>
+                                </h5>
+                                <table class="table table-sm" style="font-size: 12px;">
+                                    <tr>
+                                        <td style="width: 45%; padding: 5px;"><strong>Bedrooms:</strong></td>
+                                        <td style="padding: 5px;"><t t-esc="o.bedrooms"/></td>
+                                    </tr>
+                                    <tr style="background-color: #f8f9fa;">
+                                        <td style="padding: 5px;"><strong>Living Area:</strong></td>
+                                        <td style="padding: 5px;"><strong><t t-esc="o.living_area"/> sqm</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 5px;"><strong>Facades:</strong></td>
+                                        <td style="padding: 5px;"><t t-esc="o.facades if o.facades else 0"/></td>
+                                    </tr>
+                                    <tr style="background-color: #f8f9fa;">
+                                        <td style="padding: 5px;"><strong>Garage:</strong></td>
+                                        <td style="padding: 5px;">
+                                            <span t-if="o.garage">Yes</span>
+                                            <span t-else="">No</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </t>
+
+                    <!-- Garden Information (conditional) -->
+                    <t t-if="o.garden and (not data or data.get('show_garden', True))">
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-12">
                                 <h5 style="background-color: #28a745; color: white; padding: 6px; border-radius: 3px; font-size: 14px;">
@@ -120,7 +157,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-12">
                                 <table class="table table-sm table-borderless" style="font-size: 12px;">
                                     <tr>
                                         <td style="width: 50%;"><strong>Garden Area:</strong></td>
@@ -136,12 +173,8 @@
                                             <t t-else="">N/A</t>
                                         </td>
                                     </tr>
-                                </table>
-                            </div>
-                            <div class="col-6">
-                                <table class="table table-sm table-borderless" style="font-size: 12px;">
                                     <tr>
-                                        <td style="width: 40%;"><strong>Total Area:</strong></td>
+                                        <td><strong>Total Area:</strong></td>
                                         <td><t t-esc="o.total_area"/> sqm</td>
                                     </tr>
                                 </table>
@@ -149,8 +182,8 @@
                         </div>
                     </t>
 
-                    <!-- Tags -->
-                    <t t-if="o.tag_ids">
+                    <!-- Tags (conditional) -->
+                    <t t-if="o.tag_ids and (not data or data.get('show_tags', True))">
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-12">
                                 <h5 style="background-color: #17a2b8; color: white; padding: 6px; border-radius: 3px; font-size: 14px;">
@@ -169,8 +202,8 @@
                         </div>
                     </t>
 
-                    <!-- Description -->
-                    <t t-if="o.description">
+                    <!-- Description (conditional) -->
+                    <t t-if="o.description and (not data or data.get('show_description', True))">
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-12">
                                 <h5 style="background-color: #6c757d; color: white; padding: 6px; border-radius: 3px; font-size: 14px;">
@@ -189,8 +222,8 @@
                         </div>
                     </t>
 
-                    <!-- Offers Table -->
-                    <t t-if="o.offer_ids">
+                    <!-- Offers List (conditional) -->
+                    <t t-if="o.offer_ids and data and data.get('show_offers', False)">
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-12">
                                 <h5 style="background-color: #ffc107; color: #000; padding: 6px; border-radius: 3px; font-size: 14px;">
@@ -247,21 +280,19 @@
                                 <strong><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y - %H:%M:%S')"/></strong>
                             </p>
                         </div>
-                    </div>                    </div>
+                    </div>
+                </div>
             </t>
         </t>
     </template>
 
-    <!-- Report action definition -->
-    <record id="action_report_real_estate" model="ir.actions.report">
-        <field name="name">Property Report</field>
+    <!-- Report Action (called only from wizard, not in Print menu) -->
+    <record id="action_report_real_estate_custom" model="ir.actions.report">
+        <field name="name">Custom Print</field>
         <field name="model">real.estate</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">estate.report_real_estate_document</field>
-        <field name="report_file">estate.report_real_estate_document</field>
-        <field name="binding_model_id" ref="model_real_estate"/>
-        <field name="binding_type">report</field>
-        <field name="print_report_name">'Property Report - %s' % (object.name)</field>
+        <field name="report_name">estate.report_real_estate_custom_document</field>
+        <field name="report_file">estate.report_real_estate_custom_document</field>
         <field name="paperformat_id" ref="base.paperformat_euro"/>
     </record>
 

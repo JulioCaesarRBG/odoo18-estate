@@ -25,6 +25,10 @@
         
         #reports
         "reports/real_estate_report_template.xml",
+        "reports/real_estate_custom_report_template.xml",
+        
+        #wizards
+        # "wizard/real_estate_batch_report_wizard_view.xml",
         
         #menus
         "views/estate_menus.xml",
