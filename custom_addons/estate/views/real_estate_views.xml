@@ -58,7 +58,8 @@
                 <header>
                     <button name="action_sold" invisible="state in ('sold', 'canceled')" type="object" string="Sold" confirm="Are you sure you want to mark this property as sold?"/>
                     <button name="action_cancel" invisible="state in ('sold', 'canceled')" type="object" string="Cancel" confirm="Are you sure you want to cancel this property?"/>
-                    <button name="%(estate.action_report_real_estate)d" type="action" string="Print" class="oe_highlight" icon="fa-print"/>
+                    <button name="%(estate.action_report_real_estate)d" type="action" string="Print" icon="fa-print"/>
+                    <button name="%(estate.action_real_estate_batch_report_wizard)d" type="action" string="Custom Print" class="oe_highlight" icon="fa-file-pdf-o"/>
                     <field name="state" widget="statusbar" statusbar_visible="new,received,accepted,sold,canceled"/>
                 </header>
                 <sheet>

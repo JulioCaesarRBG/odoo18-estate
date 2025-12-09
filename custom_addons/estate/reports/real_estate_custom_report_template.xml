@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Custom Print Template (with field selection from wizard) -->
+    <!-- Custom Real Estate Report Template -->
     <template id="report_real_estate_custom_document">
         <t t-call="web.html_container">
+        <t t-call="web.external_layout">
             <t t-foreach="docs" t-as="o">
-                <div class="page" style="padding: 20mm 15mm;">
+                <div class="page" style="padding: 10mm 15mm;">
                     
-                    <!-- Company Header (conditional from wizard) -->
-                    <t t-if="not data or data.get('include_images', True)">
+                    <!-- Header with Company Logo and Report Title -->
+                    <t t-if="include_images">
                         <div class="row" style="border-bottom: 2px solid #875A7B; margin-bottom: 15px; padding-bottom: 8px;">
                             <div class="col-6">
                                 <img t-if="o.env.company.logo" t-att-src="image_data_uri(o.env.company.logo)" style="max-height: 60px;" alt="Company Logo"/>
@@ -49,7 +50,7 @@
                     </div>
 
                     <!-- Property Details (conditional) -->
-                    <t t-if="not data or data.get('show_property_details', True)">
+                    <t t-if="show_property_details">
                         <div class="row">
                             <div class="col-12">
                                 <h5 style="background-color: #f8f9fa; padding: 6px; border-left: 3px solid #875A7B; margin-bottom: 10px; font-size: 14px;">
@@ -70,7 +71,7 @@
                     </t>
 
                     <!-- Price Information (conditional) -->
-                    <t t-if="not data or data.get('show_price_info', True)">
+                    <t t-if="show_price_info">
                         <div class="row">
                             <div class="col-12">
                                 <h5 style="background-color: #f8f9fa; padding: 6px; border-left: 3px solid #875A7B; margin-bottom: 10px; font-size: 14px;">
@@ -95,7 +96,7 @@
                     </t>
 
                     <!-- Contact Information (conditional) -->
-                    <t t-if="not data or data.get('show_contact_info', True)">
+                    <t t-if="show_contact_info">
                         <div class="row">
                             <div class="col-12">
                                 <h5 style="background-color: #f8f9fa; padding: 6px; border-left: 3px solid #875A7B; margin-bottom: 10px; font-size: 14px;">
@@ -116,7 +117,7 @@
                     </t>
 
                     <!-- Specifications (conditional) -->
-                    <t t-if="not data or data.get('show_specifications', True)">
+                    <t t-if="show_specifications">
                         <div class="row">
                             <div class="col-12">
                                 <h5 style="background-color: #f8f9fa; padding: 6px; border-left: 3px solid #875A7B; margin-bottom: 10px; font-size: 14px;">
@@ -148,7 +149,7 @@
                     </t>
 
                     <!-- Garden Information (conditional) -->
-                    <t t-if="o.garden and (not data or data.get('show_garden', True))">
+                    <t t-if="o.garden and show_garden">
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-12">
                                 <h5 style="background-color: #28a745; color: white; padding: 6px; border-radius: 3px; font-size: 14px;">
@@ -183,7 +184,7 @@
                     </t>
 
                     <!-- Tags (conditional) -->
-                    <t t-if="o.tag_ids and (not data or data.get('show_tags', True))">
+                    <t t-if="o.tag_ids and show_tags">
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-12">
                                 <h5 style="background-color: #17a2b8; color: white; padding: 6px; border-radius: 3px; font-size: 14px;">
@@ -203,7 +204,7 @@
                     </t>
 
                     <!-- Description (conditional) -->
-                    <t t-if="o.description and (not data or data.get('show_description', True))">
+                    <t t-if="o.description and show_description">
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-12">
                                 <h5 style="background-color: #6c757d; color: white; padding: 6px; border-radius: 3px; font-size: 14px;">
@@ -223,7 +224,7 @@
                     </t>
 
                     <!-- Offers List (conditional) -->
-                    <t t-if="o.offer_ids and data and data.get('show_offers', False)">
+                    <t t-if="o.offer_ids and show_offers">
                         <div class="row" style="margin-top: 15px;">
                             <div class="col-12">
                                 <h5 style="background-color: #ffc107; color: #000; padding: 6px; border-radius: 3px; font-size: 14px;">
@@ -282,17 +283,22 @@
                         </div>
                     </div>
                 </div>
+                <div style="page-break-after: always;"></div>
             </t>
+        </t>
         </t>
     </template>
 
-    <!-- Report Action (called only from wizard, not in Print menu) -->
+    <!-- Report Action Definition -->
     <record id="action_report_real_estate_custom" model="ir.actions.report">
         <field name="name">Custom Print</field>
         <field name="model">real.estate</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">estate.report_real_estate_custom_document</field>
         <field name="report_file">estate.report_real_estate_custom_document</field>
+        <field name="print_report_name">'Custom Property Report - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="estate.model_real_estate"/>
+        <field name="binding_type">report</field>
         <field name="paperformat_id" ref="base.paperformat_euro"/>
     </record>
 

@@ -10,6 +10,9 @@
         "security/res_groups.xml",
         "security/ir.model.access.csv",
 
+        #wizards (must be loaded before views that reference them)
+        "views/real_estate_batch_report_wizard_views.xml",
+
         #views
         "views/real_estate_views.xml",
         "views/real_estate_tag_view.xml",
@@ -26,9 +29,6 @@
         #reports
         "reports/real_estate_report_template.xml",
         "reports/real_estate_custom_report_template.xml",
-        
-        #wizards
-        # "wizard/real_estate_batch_report_wizard_view.xml",
         
         #menus
         "views/estate_menus.xml",

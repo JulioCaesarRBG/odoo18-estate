@@ -247,9 +247,13 @@
                                 <strong><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y - %H:%M:%S')"/></strong>
                             </p>
                         </div>
-                    </div>                    </div>
+                    </div>                    
+                    </div>
+            <div style="page-break-after: always;"></div>
             </t>
+            
         </t>
+        
     </template>
 
     <!-- Report action definition -->

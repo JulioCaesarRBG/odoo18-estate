@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Wizard Form View -->
+    <record id="view_real_estate_batch_report_wizard_form" model="ir.ui.view">
+        <field name="name">real.estate.batch.report.wizard.form</field>
+        <field name="model">real.estate.batch.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Custom Print Wizard">
+                <group>
+                    <group string="Properties">
+                        <field name="property_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        <field name="property_count" readonly="1"/>
+                    </group>
+                </group>
+                
+                <group string="Fields to Display">
+                    <group>
+                        <field name="show_property_details"/>
+                        <field name="show_price_info"/>
+                        <field name="show_contact_info"/>
+                        <field name="show_specifications"/>
+                    </group>
+                    <group>
+                        <field name="show_garden"/>
+                        <field name="show_tags"/>
+                        <field name="show_description"/>
+                        <field name="show_offers"/>
+                    </group>
+                </group>
+                
+                <group string="Report Options">
+                    <group>
+                        <field name="include_images"/>
+                        <field name="group_by_type"/>
+                    </group>
+                    <group>
+                        <field name="sort_by"/>
+                    </group>
+                </group>
+                
+                <footer>
+                    <button name="action_print_report" type="object" string="Print PDF" class="btn-primary" icon="fa-print"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Wizard Action --> 
+    <record id="action_real_estate_batch_report_wizard" model="ir.actions.act_window">
+        <field name="name">Custom Print</field>
+        <field name="res_model">real.estate.batch.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="estate.model_real_estate"/>
+        <field name="binding_view_types">form,list</field>
+    </record>
+
+</odoo>
