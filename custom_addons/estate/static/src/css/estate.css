@@ -16,3 +16,10 @@
 .o_action_manager .btn.btn-primary {
     background-color: #3498db !important;
 }
+
+/* Navbar link color */
+.o_main_navbar a,
+.o_main_navbar .o_menu_brand,
+.o_main_navbar .o_menu_sections > li > a {
+    background-color: #3498db !important;
+}
