@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_real_estate_manual_docx_wizard_form" model="ir.ui.view">
+        <field name="name">real.estate.manual.docx.wizard.form</field>
+        <field name="model">real.estate.manual.docx.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Property DOCX">
+                <group>
+                    <field name="name"/>
+                    <field name="email"/>
+                </group>
+                <footer>
+                    <button name="action_generate_pdf" type="object" string="Generate PDF" class="btn-primary"/>
+                    <button name="action_send_pdf_email" type="object" string="Kirim ke Email" class="btn-secondary" invisible="not generated_pdf"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+                <field name="generated_pdf" filename="generated_pdf_filename" readonly="1" invisible="not generated_pdf"/>
+                <field name="generated_pdf_filename" invisible="1"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_real_estate_manual_docx_wizard" model="ir.actions.act_window">
+        <field name="name">Generate Certificate</field>
+        <field name="res_model">real.estate.manual.docx.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_real_estate_manual_docx_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

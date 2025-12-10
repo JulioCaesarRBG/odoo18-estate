@@ -12,6 +12,7 @@
 
         #wizards (must be loaded before views that reference them)
         "views/real_estate_batch_report_wizard_views.xml",
+        "views/real_estate_docx_wizard_views.xml",
 
         #views
         "views/real_estate_views.xml",

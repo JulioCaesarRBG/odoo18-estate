@@ -11,6 +11,7 @@
         <menuitem id="controller_level" name="Controller">
             <menuitem id="controller_example" name="Example" action="action_custom_example_list"/>
             <menuitem id="render_level" name="Render Page" action="action_render_page"/>
+            <menuitem id="docx_wizard_menu" name="Generate PDF" action="action_real_estate_manual_docx_wizard"/>
         </menuitem>
     </menuitem>
 </odoo>
