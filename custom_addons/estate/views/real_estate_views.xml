@@ -132,12 +132,51 @@
             </form>
         </field>
     </record>
+
+    <!-- Real Estate Graph View -->
+    <record id="view_real_estate_graph" model="ir.ui.view">
+    <field name="name">real.estate.graph</field>
+    <field name="model">real.estate</field>
+    <field name="arch" type="xml">
+        <graph string="Properties by Salesperson" type="bar">
+            <field name="salesperson_id" type="row"/>
+            <field name="state" type="row"/>
+            <field name="selling_price" type="measure"/>
+        </graph>
+    </field>
+    </record>
+
+    <!-- Real Estate Kanban View -->
+    <record id="real_estate_kanban_view" model="ir.ui.view">
+        <field name="name">real.estate.view.kanban</field>
+        <field name="model">real.estate</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="state"/>
+                <field name="salesperson_id"/>
+                <field name="expected_price"/>
+                <field name="selling_price"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div>Status: <field name="state"/></div>
+                            <div>Salesperson: <field name="salesperson_id"/></div>
+                            <div>Expected Price: <field name="expected_price"/></div>
+                            <div>Selling Price: <field name="selling_price"/></div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
     
     <!-- Real Estate Action -->
     <record id="test_record" model="ir.actions.act_window">
         <field name="name">Real Estate</field>
         <field name="res_model">real.estate</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,graph,kanban</field>
         <field name="context">{'search_default_filter_available': True}</field>
     </record>
 
